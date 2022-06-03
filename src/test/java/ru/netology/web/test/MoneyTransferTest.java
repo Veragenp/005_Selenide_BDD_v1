@@ -31,6 +31,9 @@ class MoneyTransferTest {
         verificationPage.validVerify(verificationCode);
         var getBalancePage = new GetBalancePage();
         //getBalancePage.getFirstCardBalance();
+        int balanceFirstCard = getBalancePage.getCardBalance("0001");
+        int balanceSecondCard = getBalancePage.getCardBalance("0002");
+
         assertEquals(20500, getBalancePage.getCardBalance("0002"));
 
             }
@@ -45,6 +48,8 @@ class MoneyTransferTest {
         var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
         verificationPage.validVerify(verificationCode);
         transactionPage.clickOnButtonFirst();
+        transactionPage.transactionFirstToSecondCard(DataHelper.getNumberFirstCard());
+
 
 
 
