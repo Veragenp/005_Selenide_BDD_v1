@@ -33,6 +33,16 @@ public class TransactionPage {
     private SelenideElement cardNumberField = $("[data-test-id=from] input");
     private SelenideElement buttonTransfer = $("[data-test-id=action-transfer]");
 
+    private int amount;
+
+    public TransactionPage(int amount) {
+        this.amount = amount;
+    }
+
+    public int getAmount() {
+         return amount;
+    }
+
 
 
     public DashboardPage clickOnButtonFirst() {
@@ -55,13 +65,23 @@ public class TransactionPage {
     //Создать отдельный метод на кнопку "Отмена", чтобы протестировать?
     //После нажатия на кнопку переход на DashboardPage()
 
-    public DashboardPage transactionFirstToSecondCard(DataHelper.TransactionDateForFirstCard firstCard) {
-        //метод кликает на кнопку продолжить первой карты и должен получить страницу
 
-        amountField.setValue("100");
-        cardNumberField.setValue(firstCard.getNumberFirstCard());
-        buttonTransfer.click();
-        return new DashboardPage();
+    public DashboardPage transactionFirstToSecondCard(DataHelper.TransactionDateForSecondCard secondCard) {
+        //метод кликает на кнопку продолжить первой карты и должен получить страницу
+        var getBalancePage = new GetBalancePage();
+        int initialBalanceSecondCard = getBalancePage.getCardBalance("0002");
+        int expectedBalanceSecondCard = initialBalanceSecondCard - getAmount();
+        clickOnButtonFirst();
+        if (expectedBalanceSecondCard < 0) {
+            return null;
+        }
+        if (expectedBalanceSecondCard >= 0) {
+            String stAmount = Integer.toString(amount);
+            amountField.setValue(stAmount);
+            cardNumberField.setValue(secondCard.getNumberSecondCard());
+            buttonTransfer.click();
+        }
+       return new DashboardPage();
     }
 
 

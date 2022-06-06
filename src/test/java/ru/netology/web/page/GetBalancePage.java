@@ -7,8 +7,6 @@ import lombok.val;
 import static com.codeborne.selenide.Selenide.$$;
 
 public class GetBalancePage {
-    //селектор для поля первой карты
-    //селектор для поля второй карты
     private ElementsCollection cards = $$(".list__item div");
     private final String balanceStart = "баланс: ";
     private final String balanceFinish = " р.";
@@ -16,14 +14,7 @@ public class GetBalancePage {
     public GetBalancePage() {
 
     }
-    //public int getFirstCardBalance() {
-       // val text = cards.first().text();
-      //  return extractBalance(text);
-   // }
-
     public int getCardBalance(String id) {
-        //найти карту с нужным ID
-        //bpdktxm lfyyst
         val card = cards.filterBy(Condition.text(id));
         val text = card.first().text();
 
