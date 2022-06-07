@@ -1,4 +1,5 @@
 package ru.netology.web.test;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.netology.web.data.DataHelper;
@@ -29,25 +30,69 @@ class MoneyTransferTest {
 
     }
     @Test
-    void shouldTransactionAmountLessThanBalance() {
+    void shouldTransactionAmountLessThanBalanceFromSecondToFirstCard() {
         var transactionPage = new TransactionPage(100);
         var getBalancePage = new GetBalancePage();
+        transactionPage.alignmentAmount(DataHelper.getNumberFirstCard(), DataHelper.getNumberSecondCard());
         int expectedBalanceFirstCard = getBalancePage.getCardBalance("0001") + transactionPage.getAmount();
         int expectedBalanceSecondCard = getBalancePage.getCardBalance("0002") - transactionPage.getAmount();
         transactionPage.transactionFirstToSecondCard(DataHelper.getNumberSecondCard());
+        assertEquals(expectedBalanceFirstCard, getBalancePage.getCardBalance("0001"));
+        assertEquals(expectedBalanceSecondCard, getBalancePage.getCardBalance("0002"));
+        }
+
+    @Test
+     void shouldTransactionAmountLessThanBalanceFromFirstToSecondCard() {
+        var transactionPage = new TransactionPage(100);
+        var getBalancePage = new GetBalancePage();
+        transactionPage.alignmentAmount(DataHelper.getNumberFirstCard(), DataHelper.getNumberSecondCard());
+        int expectedBalanceFirstCard = getBalancePage.getCardBalance("0001") - transactionPage.getAmount();
+        int expectedBalanceSecondCard = getBalancePage.getCardBalance("0002") + transactionPage.getAmount();
+        transactionPage.transactionSecondToFirstCard(DataHelper.getNumberFirstCard());
         assertEquals(expectedBalanceFirstCard, getBalancePage.getCardBalance("0001"));
         assertEquals(expectedBalanceSecondCard, getBalancePage.getCardBalance("0002"));
     }
 
     @Test
-    void shouldТNotTransactionAmountAboveThanBalance() {
-        var transactionPage = new TransactionPage(100000);
+    void shouldNotTransactionAmountAboveThanBalanceFromSecondToFirstCard() {
+        var transactionPage = new TransactionPage(15000);
         var getBalancePage = new GetBalancePage();
-        int expectedBalanceFirstCard = getBalancePage.getCardBalance("0001") + transactionPage.getAmount();
-        int expectedBalanceSecondCard = getBalancePage.getCardBalance("0002") - transactionPage.getAmount();
+        transactionPage.alignmentAmount(DataHelper.getNumberFirstCard(), DataHelper.getNumberSecondCard());
+        int expectedBalanceFirstCard = getBalancePage.getCardBalance("0001");
+        int expectedBalanceSecondCard = getBalancePage.getCardBalance("0002");
+        transactionPage.transactionFirstToSecondCard(DataHelper.getNumberSecondCard());
+        assertEquals(expectedBalanceSecondCard, getBalancePage.getCardBalance("0002"));
+    }
+    @Test
+    void shouldTransactionAmountAboveThanBalanceFromFirstToSecondCard() {
+        var transactionPage = new TransactionPage(15000);
+        var getBalancePage = new GetBalancePage();
+        transactionPage.alignmentAmount(DataHelper.getNumberFirstCard(), DataHelper.getNumberSecondCard());
+        int expectedBalanceFirstCard = getBalancePage.getCardBalance("0001");
+        int expectedBalanceSecondCard = getBalancePage.getCardBalance("0002");
+        transactionPage.transactionSecondToFirstCard(DataHelper.getNumberFirstCard());
+        assertEquals(expectedBalanceFirstCard, getBalancePage.getCardBalance("0001"));
+       }
+
+   @Test
+    void shouldNotTransactionZeroAmountBalanceFromSecondToFirstCard() {
+        var transactionPage = new TransactionPage(0);
+        var getBalancePage = new GetBalancePage();
+        transactionPage.alignmentAmount(DataHelper.getNumberFirstCard(), DataHelper.getNumberSecondCard());
+        int expectedBalanceFirstCard = getBalancePage.getCardBalance("0001");
+        int expectedBalanceSecondCard = getBalancePage.getCardBalance("0002");
         transactionPage.transactionFirstToSecondCard(DataHelper.getNumberSecondCard());
         assertEquals(expectedBalanceFirstCard, getBalancePage.getCardBalance("0001"));
         assertEquals(expectedBalanceSecondCard, getBalancePage.getCardBalance("0002"));
     }
-
+    @Test
+    void shouldNotTransactionZeroAmountBalanceFromFirstToSecondCard() {
+        var transactionPage = new TransactionPage(0);
+        var getBalancePage = new GetBalancePage();
+        transactionPage.alignmentAmount(DataHelper.getNumberFirstCard(), DataHelper.getNumberSecondCard());
+        int expectedBalanceFirstCard = getBalancePage.getCardBalance("0001");
+        int expectedBalanceSecondCard = getBalancePage.getCardBalance("0002");
+        transactionPage.transactionSecondToFirstCard(DataHelper.getNumberFirstCard());
+        assertEquals(expectedBalanceFirstCard, getBalancePage.getCardBalance("0001"));
+    }
 }

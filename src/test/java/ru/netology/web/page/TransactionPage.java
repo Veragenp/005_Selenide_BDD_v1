@@ -1,6 +1,7 @@
 package ru.netology.web.page;
 
 import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.Keys;
 import ru.netology.web.data.DataHelper;
 
 import static com.codeborne.selenide.Condition.visible;
@@ -40,9 +41,8 @@ public class TransactionPage {
     }
 
     public int getAmount() {
-         return amount;
+        return amount;
     }
-
 
 
     public DashboardPage clickOnButtonFirst() {
@@ -68,21 +68,66 @@ public class TransactionPage {
 
     public DashboardPage transactionFirstToSecondCard(DataHelper.TransactionDateForSecondCard secondCard) {
         //метод кликает на кнопку продолжить первой карты и должен получить страницу
-        var getBalancePage = new GetBalancePage();
-        int initialBalanceSecondCard = getBalancePage.getCardBalance("0002");
-        int expectedBalanceSecondCard = initialBalanceSecondCard - getAmount();
         clickOnButtonFirst();
-        if (expectedBalanceSecondCard < 0) {
-            return null;
+        String stAmount = Integer.toString(amount);
+        amountField.sendKeys(Keys.CONTROL + "A");
+        amountField.sendKeys(Keys.DELETE);
+        amountField.setValue(stAmount);
+        cardNumberField.sendKeys(Keys.CONTROL + "A");
+        cardNumberField.sendKeys(Keys.DELETE);
+        cardNumberField.setValue(secondCard.getNumberSecondCard());
+        buttonTransfer.click();
+        return new DashboardPage();
+    }
+    public DashboardPage transactionSecondToFirstCard(DataHelper.TransactionDateForFirstCard firstCard) {
+        //метод кликает на кнопку продолжить первой карты и должен получить страницу
+        clickOnButtonSecond();
+        String stAmount = Integer.toString(amount);
+        amountField.sendKeys(Keys.CONTROL + "A");
+        amountField.sendKeys(Keys.BACK_SPACE);
+        amountField.setValue(stAmount);
+        cardNumberField.sendKeys(Keys.CONTROL + "A");
+        cardNumberField.sendKeys(Keys.DELETE);
+        cardNumberField.setValue(firstCard.getNumberFirstCard());
+        buttonTransfer.click();
+        return new DashboardPage();
+    }
+
+    public DashboardPage alignmentAmount(DataHelper.TransactionDateForFirstCard firstCard, DataHelper.TransactionDateForSecondCard secondCard) {
+         var getBalancePage = new GetBalancePage();
+        int initialAmount = 10000;
+        int initialBalanceFirstCard = getBalancePage.getCardBalance("0001");
+        int initialBalanceSecondCard = getBalancePage.getCardBalance("0002");
+        if (initialBalanceFirstCard == initialAmount) {
+            return new DashboardPage();
         }
-        if (expectedBalanceSecondCard >= 0) {
-            String stAmount = Integer.toString(amount);
+        if (initialBalanceFirstCard > initialAmount) {
+            clickOnButtonSecond();
+            int difference = initialBalanceFirstCard - initialAmount;
+            String stAmount = Integer.toString(difference);
+            amountField.sendKeys(Keys.CONTROL + "A");
+            amountField.sendKeys(Keys.BACK_SPACE);
             amountField.setValue(stAmount);
+            cardNumberField.sendKeys(Keys.CONTROL + "A");
+            cardNumberField.sendKeys(Keys.DELETE);
+            cardNumberField.setValue(firstCard.getNumberFirstCard());
+            buttonTransfer.click();
+            return new DashboardPage();
+        }
+        if (initialBalanceFirstCard < initialAmount) {
+            clickOnButtonFirst();
+            String stAmount = Integer.toString(initialBalanceSecondCard - initialAmount);
+            amountField.sendKeys(Keys.CONTROL + "A");
+            amountField.sendKeys(Keys.BACK_SPACE);
+            amountField.setValue(stAmount);
+            cardNumberField.sendKeys(Keys.CONTROL + "A");
+            cardNumberField.sendKeys(Keys.DELETE);
             cardNumberField.setValue(secondCard.getNumberSecondCard());
             buttonTransfer.click();
+            return new DashboardPage();
         }
-       return new DashboardPage();
-    }
+        return new DashboardPage();
+        }
 
 
 }
