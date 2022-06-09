@@ -31,6 +31,6 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Validate Gradle wrapper
-        run: ./artifacts/app-ibank-build-for-testers.jar &
+        run: java -jar ./artifacts/app-ibank-build-for-testers.jar -P:profile=test &
       - name: Build with Gradle
         run: ./gradlew test --info -Dselenide.headless=true
