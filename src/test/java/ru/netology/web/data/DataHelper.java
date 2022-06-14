@@ -27,59 +27,20 @@ public class DataHelper {
     public static VerificationCode getVerificationCodeFor(AuthInfo authInfo) {
         return new VerificationCode("12345");
     }
-//
-//    @Value
-//    public static class TransactionDate {
-//        private String numberFirstCard;
-//        private String numberSecondCard;
-//        private int amount;
-//            }
-//
-//    public static TransactionDate getNumberFirstCard() {
-//        return new TransactionDate("5559 0000 0000 0001");
-//    }
-//    public static TransactionDate getNumberSecondCard() {
-//        return new TransactionDate("5559 0000 0000 0002");
-//    }
+
 
     @Value
-    public static class FirstCard {
+    public static class CardInfo {
         private String number;
     }
 
-    public static FirstCard getFirstCard() {
-        return new FirstCard("5559 0000 0000 0001");
+    public static CardInfo getFirstCard() {
+        return new CardInfo("5559 0000 0000 0001");
     }
 
-    @Value
-    public static class SecondCard {
-        private String number;
+      public static CardInfo getSecondCard() {
+        return new CardInfo("5559 0000 0000 0002");
     }
-
-    public static SecondCard getSecondCard() {
-        return new SecondCard("5559 0000 0000 0002");
-    }
-
-    @Value
-    public static class TransactionDateForFirstCard {
-        private String numberFirstCard;
-    }
-
-    public static TransactionDateForFirstCard getNumberFirstCard() {
-        return new TransactionDateForFirstCard("5559 0000 0000 0001");
-    }
-
-    @Value
-    public static class TransactionDateForSecondCard {
-        private String numberSecondCard;
-    }
-
-    public static TransactionDateForSecondCard getNumberSecondCard() {
-        return new TransactionDateForSecondCard("5559 0000 0000 0002");
-    }
-
-
-
 
 }
 
